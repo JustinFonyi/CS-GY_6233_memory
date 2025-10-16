@@ -1,15 +1,5 @@
 #include "oslabs.h"
 
-//Set Null
-struct MEMORY_BLOCK set_null(struct MEMORY_BLOCK *block)
-{
-	(*block).process_id =0;
-	(*block).start_address = 0;
-	(*block).end_address = 0;
-	(*block).segment_size = 0;
-	return *block;
-}
-
 //Null Check
 int check_null(struct MEMORY_BLOCK block){
 	if(block.process_id == 0 
@@ -20,6 +10,16 @@ int check_null(struct MEMORY_BLOCK block){
         }
 	else
 		return 0;
+}
+
+//Set Null
+struct MEMORY_BLOCK set_null(struct MEMORY_BLOCK *block)
+{
+	(*block).process_id =0;
+	(*block).start_address = 0;
+	(*block).end_address = 0;
+	(*block).segment_size = 0;
+	return *block;
 }
 
 //Best Fit
