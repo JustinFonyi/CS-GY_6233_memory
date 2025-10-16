@@ -136,8 +136,8 @@ struct MEMORY_BLOCK next_fit_allocate(int request_size, struct MEMORY_BLOCK memo
 	int size_diff = 10000;
 	int index = 0;
 	for (int i = 0; i < *map_cnt; i++){
-		if(memory_map[i].segment_size - request_size <= sizeDiff && memory_map[i].process_id == 0){
-			sizeDiff = memory_map[i].segment_size - request_size;
+		if(memory_map[i].segment_size - request_size <= size_diff && memory_map[i].process_id == 0){
+			size_diff = memory_map[i].segment_size - request_size;
 			index = i;
 		}
 	}
@@ -167,7 +167,7 @@ struct MEMORY_BLOCK next_fit_allocate(int request_size, struct MEMORY_BLOCK memo
 
 } 
 // Release memory
-void release_memory(struct MEMORY_BLOCK freed_block, struct MEMORY_BLOCK memory_map[MAPMAX], int *map_cnt) {
+void release_memory(struct MEMORY_BLOCK freed_block, struct MEMORY_BLOCK memory_map[MAPMAX], int *map_cnt){
     int free_block;
     for (int i = 0; i < *map_cnt; i++){
         if(freed_block.process_id == memory_map[i].process_id){
