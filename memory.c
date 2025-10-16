@@ -28,7 +28,7 @@ struct MEMORY_BLOCK best_fit_allocate(int request_size, struct MEMORY_BLOCK memo
     int size_diff = 10000;
 	for (int i = 0; i < *map_cnt; i++){
 		if(memory_map[i].segment_size - request_size <= size_diff && memory_map[i].process_id == 0){
-			sizeDiff = memory_map[i].segment_size - request_size;
+			size_diff = memory_map[i].segment_size - request_size;
 			index = i;
 		}
 	}
@@ -65,7 +65,7 @@ struct MEMORY_BLOCK first_fit_allocate(int request_size, struct MEMORY_BLOCK mem
     int index = 0;
 	for (int i = 0; i < *map_cnt; i++){
 		if(memory_map[i].segment_size - request_size <= size_diff && memory_map[i].process_id == 0){
-			sizeDiff = memory_map[i].segment_size - request_size;
+			size_diff = memory_map[i].segment_size - request_size;
 			index = i;
 		}
 	}
@@ -136,7 +136,7 @@ struct MEMORY_BLOCK next_fit_allocate(int request_size, struct MEMORY_BLOCK memo
 	int index = 0;
 	for (int i = 0; i < *map_cnt; i++){
 		if(memory_map[i].segment_size - request_size <= size_diff && memory_map[i].process_id == 0){
-			sizeDiff = memory_map[i].segment_size - request_size;
+			size_diff = memory_map[i].segment_size - request_size;
 			index = i;
 		}
 	}
