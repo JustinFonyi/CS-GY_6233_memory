@@ -24,7 +24,7 @@ int check_null(struct MEMORY_BLOCK block){
 
 //Best Fit
 struct MEMORY_BLOCK best_fit_allocate(int request_size, struct MEMORY_BLOCK memory_map[MAPMAX], int *map_cnt, int process_id){
-    int index = 0;
+    int index = -1;
     int size_diff = 10000;
     for (int i = 0; i < *map_cnt; i++) {
         if (memory_map[i].process_id == 0 && memory_map[i].segment_size - request_size <= size_diff) {
@@ -63,7 +63,7 @@ struct MEMORY_BLOCK best_fit_allocate(int request_size, struct MEMORY_BLOCK memo
 // First Fit
 struct MEMORY_BLOCK first_fit_allocate(int request_size, struct MEMORY_BLOCK memory_map[MAPMAX], int *map_cnt, int process_id){
     int size_diff = 10000;
-    int index = 0;
+    int index = -1;
     for (int i = 0; i < *map_cnt; i++) {
         if (memory_map[i].process_id == 0 && memory_map[i].segment_size - request_size <= size_diff){
 			size_diff = memory_map[i].segment_size - request_size;
@@ -97,7 +97,7 @@ struct MEMORY_BLOCK first_fit_allocate(int request_size, struct MEMORY_BLOCK mem
 
 // Worst Fit
 struct MEMORY_BLOCK worst_fit_allocate(int request_size, struct MEMORY_BLOCK memory_map[MAPMAX], int *map_cnt, int process_id){
-    int index = 0;
+    int index = -1;
     int size_diff = 10000;
     for (int i = 0; i < *map_cnt; i++) {
         if (memory_map[i].process_id == 0 && memory_map[i].segment_size - request_size <= size_diff)
@@ -134,7 +134,7 @@ struct MEMORY_BLOCK worst_fit_allocate(int request_size, struct MEMORY_BLOCK mem
 //Next Fit
 struct MEMORY_BLOCK next_fit_allocate(int request_size, struct MEMORY_BLOCK memory_map[MAPMAX],int *map_cnt, int process_id, int last_address){
 	int size_diff = 10000;
-	int index = 0;
+	int index = -1;
 	for (int i = 0; i < *map_cnt; i++){
 		if(memory_map[i].segment_size - request_size <= size_diff && memory_map[i].process_id == 0){
 			size_diff = memory_map[i].segment_size - request_size;
