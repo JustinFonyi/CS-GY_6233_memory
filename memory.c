@@ -5,7 +5,8 @@ int check_null(struct MEMORY_BLOCK block)
 	if(block.process_id == 0 
         && block.start_address == 0 
         && block.end_address == 0 
-        && block.segment_size == 0){
+        && block.segment_size == 0)
+	{
 	    return 1;    
     }
 	else
@@ -25,47 +26,51 @@ struct MEMORY_BLOCK set_null(struct MEMORY_BLOCK *block)
 struct MEMORY_BLOCK best_fit_allocate(int request_size, struct MEMORY_BLOCK memory_map[MAPMAX], int *map_cnt, int process_id)
 {
     int index = -1;
-    int size_diff = 100000;
-    for (int i = 0; i < *map_cnt; i++) {
-        if (memory_map[i].process_id == 0 && memory_map[i].segment_size >= request_size)
+    int size_diff  = 2147483647;
+
+    for (int i = 0; i < *map_cnt; i++)
+	{
+        if (memory_map[i].process_id == 0)
 		{
             int diff = memory_map[i].segment_size - request_size;
-            if (diff < size_diff || (diff == size_diff && (index == -1 || memory_map[i].start_address < memory_map[index].start_address)))
+            if (diff >= 0)
 			{
-                size_diff = diff;
-                index = i;
+                if (diff < size_diff || (diff == size_diff && (index == -1 || memory_map[i].start_address < memory_map[index].start_address)))
+				{
+                    size_diff  = diff;
+                    index = i;
+                }
             }
         }
     }
 
-    if(size_diff == -1)
+    if (index == -1)
 	{
         struct MEMORY_BLOCK NULLBLOCK;
-        return set_null (&NULLBLOCK);
+        return set_null(&NULLBLOCK);
     }
-    if (memory_map[index].segment_size == request_size)
+
+    if (size_diff == 0)
 	{
         memory_map[index].process_id = process_id;
         return memory_map[index];
     }
 
-    struct MEMORY_BLOCK allocated = memory_map[index];
-    allocated.end_address   = allocated.start_address + request_size - 1;
-    allocated.segment_size  = request_size;
-    allocated.process_id    = process_id;
+    struct MEMORY_BLOCK chosen = memory_map[index];
+    memory_map[index].end_address = chosen.start_address + request_size - 1;
+    memory_map[index].segment_size = request_size;
+    memory_map[index].process_id = process_id;
 
     struct MEMORY_BLOCK remainder;
-    remainder.process_id   = 0;
-    remainder.start_address = allocated.end_address + 1;
-    remainder.end_address   = memory_map[index].end_address;
-    remainder.segment_size  = remainder.end_address - remainder.start_address + 1;
+    remainder.process_id = 0;
+    remainder.start_address = memory_map[index].end_address + 1;
+    remainder.end_address = chosen.end_address;
+    remainder.segment_size = remainder.end_address - remainder.start_address + 1;
 
     for (int j = *map_cnt; j > index + 1; j--)
 	{
         memory_map[j] = memory_map[j - 1];
     }
-
-    memory_map[index]     = allocated;
     memory_map[index + 1] = remainder;
     (*map_cnt)++;
 
